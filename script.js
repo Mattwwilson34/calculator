@@ -26,12 +26,17 @@ const seperateButtons = () => {
     return btns;
 };
 
+const updateDisplay = (calcDisplayValue) => {
+    const display = document.querySelector('.display');
+    display.innerText = calcDisplayValue;
+};
+
 const receiveNumberBtnPress = (numberBtns, calcDisplayValue) => {
     numberBtns.forEach((btn) => {
         btn.addEventListener('click', (e) => {
             const btnPressed = e.target.innerText;
             calcDisplayValue += btnPressed;
-            console.log(calcDisplayValue);
+            updateDisplay(calcDisplayValue);
         });
     });
 };
