@@ -48,6 +48,10 @@ body {
     font-size: 24px;
 }
 
+.calc-btn:hover {
+    filter: brightness(0.7);
+}
+
 .calc-btn.zero-btn {
     grid-column-start: 1;
     grid-column-end: 3;
