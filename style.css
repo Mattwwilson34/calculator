@@ -1,0 +1,82 @@
+html,
+body {
+    box-sizing: border-box;
+    height: 100%;
+    width: 100%;
+    background-color: rgb(213, 213, 213);
+}
+
+.wrapper {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.calc-wrapper {
+    width: 600px;
+    border: 3px solid black;
+}
+
+.display-wrapper {
+    height: 75px;
+    width: 100%;
+    background-color: rgb(54, 48, 45);
+    display: flex;
+    justify-content: end;
+    align-items: flex-end;
+}
+
+.display {
+    color: white;
+    font-size: 64px;
+    padding-right: 5px;
+}
+
+.btn-wrapper {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+}
+
+.calc-btn {
+    height: 75px;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    border: 1px solid rgba(0, 0, 0, 0.297);
+    color: white;
+    font-size: 24px;
+}
+
+.calc-btn.zero-btn {
+    grid-column-start: 1;
+    grid-column-end: 3;
+}
+
+.divide-btn,
+.multiply-btn,
+.subtract-btn,
+.addition-btn,
+.equals-btn {
+    background-color: rgb(243, 162, 60);
+}
+
+.one-btn,
+.two-btn,
+.three-btn,
+.four-btn,
+.five-btn,
+.six-btn,
+.seven-btn,
+.eight-btn,
+.nine-btn,
+.zero-btn,
+.decimal-btn {
+    background-color: rgb(98, 97, 95);
+}
+
+.ac-btn,
+.memory-btn,
+.percent-btn {
+    background-color: rgb(67, 66, 64);
+}
