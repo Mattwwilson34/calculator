@@ -1,3 +1,7 @@
+//! Attempting to add clear functionality to calculator disaply, but having trouble
+//! because after pressing the clear button and then pressing a number button
+//! the number prior to clear being pressed is displayed + new number button
+
 const seperateButtons = () => {
     const calcBtns = document.querySelectorAll('.calc-btn');
     const calcBtnsArray = [...calcBtns];
@@ -26,17 +30,28 @@ const seperateButtons = () => {
     return btns;
 };
 
-const updateDisplay = (calcDisplayValue) => {
+const updateDisplay = (calcDisplayVal) => {
     const display = document.querySelector('.display');
-    display.innerText = calcDisplayValue;
+    display.innerText = calcDisplayVal;
 };
 
-const receiveNumberBtnPress = (numberBtns, calcDisplayValue) => {
+const clearData = () => {
+    const clearBtn = document.querySelector('.ac-btn');
+    clearBtn.addEventListener('click', (e) => {
+        let calcDisplayVal = document.querySelector('.display').innerText;
+        calcDisplayVal = '';
+        updateDisplay(calcDisplayVal);
+    });
+};
+
+/// stores number button clicks as string for calculations
+const receiveNumberBtnPress = (numberBtns) => {
     numberBtns.forEach((btn) => {
         btn.addEventListener('click', (e) => {
+            let calcDisplayVal = document.querySelector('.display').innerText;
             const btnPressed = e.target.innerText;
-            calcDisplayValue += btnPressed;
-            updateDisplay(calcDisplayValue);
+            calcDisplayVal += btnPressed;
+            updateDisplay(calcDisplayVal);
         });
     });
 };
@@ -44,8 +59,8 @@ const receiveNumberBtnPress = (numberBtns, calcDisplayValue) => {
 const main = () => {
     /// seperate calculator buttons to reduce need to select button elements within functions
     const btns = seperateButtons();
-    const calcDisplayValue = '';
-    receiveNumberBtnPress(btns.numberBtns, calcDisplayValue);
+    receiveNumberBtnPress(btns.numberBtns);
+    clearData();
 };
 
 main();
