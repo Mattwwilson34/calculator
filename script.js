@@ -1,7 +1,3 @@
-//! Attempting to add clear functionality to calculator disaply, but having trouble
-//! because after pressing the clear button and then pressing a number button
-//! the number prior to clear being pressed is displayed + new number button
-
 const seperateButtons = () => {
     const calcBtns = document.querySelectorAll('.calc-btn');
     const calcBtnsArray = [...calcBtns];
@@ -56,10 +52,46 @@ const receiveNumberBtnPress = (numberBtns) => {
     });
 };
 
+const receiveOperatorBtnPress = (operatorBtns) => {
+    operatorBtns.forEach((btn) => {
+        btn.addEventListener('click', (e) => {
+            const btnPressed = e.target;
+            const btnClass = btnPressed.classList[1];
+            switch (btnClass) {
+                case 'divide-btn':
+                    console.log('division');
+                    break;
+                case 'multiply-btn':
+                    console.log('multiply');
+                    break;
+                case 'subtract-btn':
+                    console.log('subtract');
+                    break;
+                case 'addition-btn':
+                    console.log('addition');
+                    break;
+                case 'equals-btn':
+                    console.log('equals');
+                    break;
+                case 'percent-btn':
+                    console.log('percent');
+                    break;
+                case 'memory-btn':
+                    console.log('memory');
+                    break;
+
+                default:
+                    break;
+            }
+        });
+    });
+};
+
 const main = () => {
     /// seperate calculator buttons to reduce need to select button elements within functions
     const btns = seperateButtons();
     receiveNumberBtnPress(btns.numberBtns);
+    receiveOperatorBtnPress(btns.operatorBtns);
     clearData();
 };
 
