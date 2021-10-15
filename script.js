@@ -96,3 +96,18 @@ const main = () => {
 };
 
 main();
+
+///Sudo Code
+
+/// Store and display numbers as they are pressed
+/// Once an operator is pressed store the currently displayed number in an array
+/// Store the pressed operator in a seperate array or the same array as the number
+/// Leave currently displayed number displayed until the next number is pressed then clear it
+/// If a second operator is pressed before a number is pressed replace last operator with new operator
+/// continue storing numbers and operators until the equals, clear, percent, and memory button is pressed
+/// Use array or array to compute final vale and display for user
+/// Extend usage to include decimals
+
+/// Optional
+/// Add a focus to the most recent button pressed
+/// Add keyboard functionality
