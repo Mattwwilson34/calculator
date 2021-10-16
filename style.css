@@ -33,6 +33,10 @@ body {
     padding-right: 5px;
 }
 
+[contentEditable='true']:empty:not(:focus):before {
+    content: attr(data-text);
+}
+
 .btn-wrapper {
     display: grid;
     grid-template-columns: repeat(4, 1fr);

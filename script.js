@@ -25,22 +25,33 @@ const seperateButtons = () => {
     };
     return btns;
 };
-
+const getNumberFromDisplay = () => {
+    let calcDisplayVal = document.querySelector('.display').innerText;
+    return calcDisplayVal;
+};
 const updateDisplay = (calcDisplayVal) => {
     const display = document.querySelector('.display');
     display.innerText = calcDisplayVal;
 };
-
-const clearData = () => {
-    const clearBtn = document.querySelector('.ac-btn');
-    clearBtn.addEventListener('click', (e) => {
-        let calcDisplayVal = document.querySelector('.display').innerText;
-        calcDisplayVal = '';
-        updateDisplay(calcDisplayVal);
-    });
+const updateDisplayPlaceholder = (str) => {
+    const display = document.querySelector('.display');
+    display.dataset.text = str;
 };
-
-/// stores number button clicks as string for calculations
+const clearDisplay = (arithmeticArray) => {
+    const display = document.querySelector('.display');
+    display.dataset.text = '0';
+    display.innerText = '';
+};
+const clearData = (arithmeticArray) => {
+    removeArrayElements(arithmeticArray.length, arithmeticArray);
+    clearDisplay();
+    console.log(arithmeticArray);
+};
+const convertToPercent = () => {
+    const displayValue = getNumberFromDisplay();
+    const percent = displayValue / 100;
+    updateDisplay(percent);
+};
 const receiveNumberBtnPress = (numberBtns) => {
     numberBtns.forEach((btn) => {
         btn.addEventListener('click', (e) => {
@@ -51,36 +62,85 @@ const receiveNumberBtnPress = (numberBtns) => {
         });
     });
 };
+const addNumToArithmeticArray = (arithmeticArray) => {
+    let calcDisplayValue = getNumberFromDisplay();
+    arithmeticArray.push(parseInt(calcDisplayValue));
+};
+const addOperatorToArithmeticArray = (arithmeticArray, operator) => {
+    arithmeticArray.push(operator);
+};
+const removeArrayElements = (number, array) => {
+    while (number > 0) {
+        array.shift();
+        number--;
+    }
+    return array;
+};
+const operate = (array) => {
+    let operators = {
+        '/': function (a, b) {
+            return a / b;
+        },
+        '*': function (a, b) {
+            return a * b;
+        },
+        '-': function (a, b) {
+            return a - b;
+        },
+        '+': function (a, b) {
+            return a + b;
+        },
+    };
+    const calculation = operators[array[1]](array[0], array[2]);
+    return calculation;
+};
+const performArithmetic = (arithmeticArray) => {
+    let calculation = 0;
+    calculation = operate(arithmeticArray);
+    updateDisplay(calculation);
+    arithmeticArray = removeArrayElements(3, arithmeticArray);
+};
+
+const multiOperatorArithmetic = (arithmeticArray) => {
+    let calculation = 0;
+    calculation = operate(arithmeticArray);
+    updateDisplay(calculation);
+    console.log(arithmeticArray);
+    arithmeticArray = removeArrayElements(3, arithmeticArray);
+    console.log(arithmeticArray);
+    arithmeticArray.unshift(calculation);
+    updateDisplayPlaceholder(calculation);
+};
 
 const receiveOperatorBtnPress = (operatorBtns) => {
+    let arithmeticArray = [];
     operatorBtns.forEach((btn) => {
         btn.addEventListener('click', (e) => {
-            const btnPressed = e.target;
-            const btnClass = btnPressed.classList[1];
-            switch (btnClass) {
-                case 'divide-btn':
-                    console.log('division');
+            const operator = e.target.innerText;
+            switch (operator) {
+                case '=':
+                    addNumToArithmeticArray(arithmeticArray);
+                    performArithmetic(arithmeticArray);
                     break;
-                case 'multiply-btn':
-                    console.log('multiply');
+                case 'AC':
+                    clearData(arithmeticArray);
                     break;
-                case 'subtract-btn':
-                    console.log('subtract');
+                case '%':
+                    convertToPercent();
                     break;
-                case 'addition-btn':
-                    console.log('addition');
-                    break;
-                case 'equals-btn':
-                    console.log('equals');
-                    break;
-                case 'percent-btn':
-                    console.log('percent');
-                    break;
-                case 'memory-btn':
-                    console.log('memory');
-                    break;
-
                 default:
+                    const length = arithmeticArray.length;
+                    if (arithmeticArray.length > 1) {
+                        addNumToArithmeticArray(arithmeticArray);
+                        addOperatorToArithmeticArray(arithmeticArray, operator);
+                        multiOperatorArithmetic(arithmeticArray);
+                        break;
+                    }
+                    addNumToArithmeticArray(arithmeticArray);
+                    clearDisplay();
+                    addOperatorToArithmeticArray(arithmeticArray, operator);
+                    console.log(arithmeticArray);
+                    updateDisplayPlaceholder(arithmeticArray[0]);
                     break;
             }
         });
@@ -88,11 +148,9 @@ const receiveOperatorBtnPress = (operatorBtns) => {
 };
 
 const main = () => {
-    /// seperate calculator buttons to reduce need to select button elements within functions
     const btns = seperateButtons();
     receiveNumberBtnPress(btns.numberBtns);
     receiveOperatorBtnPress(btns.operatorBtns);
-    clearData();
 };
 
 main();
