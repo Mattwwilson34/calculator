@@ -2,6 +2,8 @@ let displayValue = '';
 let numArray = [];
 let operator = '';
 let opPressed = false;
+let initialState = true;
+let lastBtnPress = '';
 const operators = {
     add: function (num1, num2) {
         return num1 + num2;
@@ -17,6 +19,39 @@ const operators = {
     },
 };
 const operate = (num1, num2, operator) => operators[operator](num1, num2);
+const storeNum = (number) => numArray.push(parseFloat(number));
+const formatNum = (number) => {
+    const maxNumSize = 999999999999999;
+    const maxNumLength = 15;
+    if (number > maxNumSize) {
+        number = Number.parseFloat(number).toExponential(3);
+    } else if (number < maxNumSize && number > 1) {
+        number = Number(number);
+    } else if (number < 1 && number.toString().length > maxNumLength) {
+        number = Number.parseFloat(number).toExponential(3);
+    } else if (number < 1 && number.toString().length < maxNumLength) {
+        number = Number(number);
+    }
+    return number;
+};
+const replaceOp = (btn) => {
+    switch (btn) {
+        case '+':
+            operator = 'add';
+            break;
+        case '-':
+            operator = 'subtract';
+            break;
+        case '*':
+            operator = 'multiply';
+            break;
+        case '/':
+            operator = 'divide';
+            break;
+        default:
+            break;
+    }
+};
 const updateDisplay = (numStr) => {
     const display = document.querySelector('.display');
     displayValue += numStr;
@@ -37,48 +72,83 @@ const clearArray = (array) => {
 const reset = () => {
     clearDisplay();
     clearArray(numArray);
+    updateDisplay('0');
     operator = '';
     opPressed = false;
+    initialState = true;
+    lastBtnPress = '';
+};
+const handleOp = (opStr = '') => {
+    if (lastBtnPress === 'equals') {
+        operator = opStr;
+        return;
+    }
+    if (numArray.length > 0) {
+        storeNum(displayValue);
+        let result = operate(numArray[0], numArray[1], operator);
+        clearArray(numArray);
+        operator = opStr;
+        storeNum(result);
+        clearDisplay();
+        result = formatNum(result);
+        updateDisplay(result);
+    } else {
+        storeNum(displayValue);
+        operator = opStr;
+        clearDisplay();
+    }
+    initialState = false;
 };
 const numPress = (btn) => {
-    if (opPressed) {
+    if (opPressed || initialState) {
         clearDisplay();
     }
     updateDisplay(btn);
     opPressed = false;
+    initialState = false;
+    lastBtnPress = 'number';
 };
-
 const opPress = (btn) => {
     switch (btn) {
         case '+':
-            if (numArray > 0) {
-                numArray.push(parseInt(displayValue));
-                let result = operate(numArray[0], numArray[1], operator);
-                clearArray(numArray);
-                operator = 'add';
-                numArray.push(result);
-                clearDisplay();
-                updateDisplay(result);
-                opPressed = true;
-                break;
-            } else {
-                numArray.push(parseInt(displayValue));
-                operator = 'add';
-                clearDisplay();
-                break;
-            }
-        case 'AC':
-            reset();
+            handleOp('add');
+            lastBtnPress = 'add';
+            break;
+        case '-':
+            handleOp('subtract');
+            lastBtnPress = 'subtract';
+            break;
+        case '*':
+            handleOp('multiply');
+            lastBtnPress = 'multiply';
+            break;
+        case '/':
+            handleOp('divide');
+            lastBtnPress = 'divide';
+            break;
+        case '=':
+            handleOp();
+            lastBtnPress = 'equals';
+            break;
         default:
             break;
     }
+    opPressed = true;
 };
 const handleBtnClick = (e) => {
     const btn = e.target.textContent;
+    console.log(btn);
     if (parseInt(btn) || btn === '0' || btn === '.') {
         numPress(btn);
+    } else if (btn === 'AC') {
+        reset();
     } else {
-        opPress(btn);
+        if (lastBtnPress === 'number' || lastBtnPress === 'equals' || lastBtnPress === '') {
+            opPress(btn);
+        } else {
+            replaceOp(btn);
+            return;
+        }
     }
 };
 const addBtnClickEvents = () => {
@@ -87,8 +157,8 @@ const addBtnClickEvents = () => {
         btn.addEventListener('click', handleBtnClick);
     });
 };
-
 function main() {
+    updateDisplay('0');
     addBtnClickEvents();
 }
 

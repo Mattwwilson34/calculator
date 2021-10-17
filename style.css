@@ -6,6 +6,10 @@ body {
     background-color: rgb(213, 213, 213);
 }
 
+button:focus {
+    border: 3px solid black;
+}
+
 .wrapper {
     height: 100%;
     display: flex;
