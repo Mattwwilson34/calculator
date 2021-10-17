@@ -2,6 +2,7 @@ let displayValue = '';
 let numArray = [];
 let operator = '';
 let opPressed = false;
+let decimalPressed = false;
 let initialState = true;
 let lastBtnPress = '';
 const operators = {
@@ -33,6 +34,24 @@ const formatNum = (number) => {
         number = Number(number);
     }
     return number;
+};
+const convToPercent = () => {
+    storeNum(displayValue);
+    let result = numArray[0] / 100;
+    clearArray(numArray);
+    storeNum(result);
+    clearDisplay();
+    result = formatNum(result);
+    updateDisplay(result);
+};
+const reverseNumSign = () => {
+    storeNum(displayValue);
+    let result = numArray[0] * -1;
+    clearArray(numArray);
+    storeNum(result);
+    clearDisplay();
+    result = formatNum(result);
+    updateDisplay(result);
 };
 const replaceOp = (btn) => {
     switch (btn) {
@@ -75,6 +94,8 @@ const reset = () => {
     updateDisplay('0');
     operator = '';
     opPressed = false;
+    decimalPressed = false;
+    document.querySelector('.decimal-btn').disabled = false;
     initialState = true;
     lastBtnPress = '';
 };
@@ -98,15 +119,6 @@ const handleOp = (opStr = '') => {
         clearDisplay();
     }
     initialState = false;
-};
-const numPress = (btn) => {
-    if (opPressed || initialState) {
-        clearDisplay();
-    }
-    updateDisplay(btn);
-    opPressed = false;
-    initialState = false;
-    lastBtnPress = 'number';
 };
 const opPress = (btn) => {
     switch (btn) {
@@ -134,14 +146,36 @@ const opPress = (btn) => {
             break;
     }
     opPressed = true;
+    decimalPressed = false;
+    document.querySelector('.decimal-btn').disabled = false;
+};
+const numPress = (btn) => {
+    if (opPressed || initialState) {
+        clearDisplay();
+    }
+    if (btn === '.' && decimalPressed) {
+        document.querySelector('.decimal-btn').disabled = true;
+        return;
+    } else if (btn === '.' && !decimalPressed) {
+        decimalPressed = true;
+    }
+    updateDisplay(btn);
+    opPressed = false;
+    initialState = false;
+    lastBtnPress = 'number';
 };
 const handleBtnClick = (e) => {
+    console.log(numArray);
+    console.log(operator);
     const btn = e.target.textContent;
-    console.log(btn);
     if (parseInt(btn) || btn === '0' || btn === '.') {
         numPress(btn);
     } else if (btn === 'AC') {
         reset();
+    } else if (btn === '+/-') {
+        reverseNumSign();
+    } else if (btn === '%') {
+        convToPercent();
     } else {
         if (lastBtnPress === 'number' || lastBtnPress === 'equals' || lastBtnPress === '') {
             opPress(btn);
