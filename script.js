@@ -49,11 +49,7 @@ const formatNum = (number) => {
 };
 const formatDisplay = () => {
     const display = document.querySelector('.display');
-    console.log(displayValue.length);
-    if (displayValue.length > 15) {
-        display.style.fontSize = '50px';
-    }
-    if (displayValue.length > 19) {
+    if (displayValue.length > 18) {
         display.style.fontSize = '40px';
     }
     if (displayValue.length > 24) {
