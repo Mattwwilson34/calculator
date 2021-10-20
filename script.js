@@ -21,6 +21,16 @@ const operators = {
 };
 const operate = (num1, num2, operator) => operators[operator](num1, num2);
 const storeNum = (number) => numArray.push(parseFloat(number));
+const resetFontSize = () => (document.querySelector('.display').style.fontSize = '64px');
+const checkDivisionByZero = () => {
+    if (operator === 'divide' && displayValue === '0') {
+        alert('Cannot divide by 0 calculator has been reset');
+        reset();
+        return true;
+    } else {
+        return false;
+    }
+};
 const formatNum = (number) => {
     const maxNumSize = 999999999999999;
     const maxNumLength = 15;
@@ -34,6 +44,26 @@ const formatNum = (number) => {
         number = Number(number);
     }
     return number;
+};
+const formatDisplay = () => {
+    const display = document.querySelector('.display');
+    console.log(displayValue.length);
+    if (displayValue.length > 18) {
+        display.style.fontSize = '50px';
+    }
+    if (displayValue.length > 23) {
+        display.style.fontSize = '40px';
+    }
+    if (displayValue.length > 29) {
+        display.style.fontSize = '30px';
+    }
+    if (displayValue.length > 39) {
+        display.style.fontSize = '20px';
+    }
+    if (displayValue.length > 59) {
+        alert('You have exceeded calculators max capacity and it has been reset');
+        reset();
+    }
 };
 const convToPercent = () => {
     storeNum(displayValue);
@@ -74,6 +104,7 @@ const replaceOp = (btn) => {
 const updateDisplay = (numStr) => {
     const display = document.querySelector('.display');
     displayValue += numStr;
+    formatDisplay(numStr);
     display.textContent = displayValue;
 };
 const clearDisplay = () => {
@@ -92,10 +123,12 @@ const reset = () => {
     clearDisplay();
     clearArray(numArray);
     updateDisplay('0');
+    document.querySelector('.ac-btn').blur();
     operator = '';
     opPressed = false;
     decimalPressed = false;
     document.querySelector('.decimal-btn').disabled = false;
+    resetFontSize();
     initialState = true;
     lastBtnPress = '';
 };
@@ -116,7 +149,7 @@ const handleOp = (opStr = '') => {
     } else {
         storeNum(displayValue);
         operator = opStr;
-        clearDisplay();
+        // clearDisplay();
     }
     initialState = false;
 };
@@ -139,9 +172,17 @@ const opPress = (btn) => {
             lastBtnPress = 'divide';
             break;
         case '=':
-            handleOp();
-            lastBtnPress = 'equals';
-            break;
+            if (numArray.length < 1) {
+                break;
+            } else if (checkDivisionByZero()) {
+                break;
+            } else {
+                handleOp();
+                resetFontSize();
+                lastBtnPress = 'equals';
+                break;
+            }
+
         default:
             break;
     }
@@ -152,6 +193,7 @@ const opPress = (btn) => {
 const numPress = (btn) => {
     if (opPressed || initialState) {
         clearDisplay();
+        resetFontSize();
     }
     if (btn === '.' && decimalPressed) {
         document.querySelector('.decimal-btn').disabled = true;
@@ -165,8 +207,6 @@ const numPress = (btn) => {
     lastBtnPress = 'number';
 };
 const handleBtnClick = (e) => {
-    console.log(numArray);
-    console.log(operator);
     const btn = e.target.textContent;
     if (parseInt(btn) || btn === '0' || btn === '.') {
         numPress(btn);
@@ -191,9 +231,96 @@ const addBtnClickEvents = () => {
         btn.addEventListener('click', handleBtnClick);
     });
 };
+const clickAndFocus = (element) => {
+    element.click();
+};
+const handleKeypress = (e) => {
+    const keyPressed = e.key;
+    switch (keyPressed) {
+        case 'c':
+            const acBtn = document.querySelector('.ac-btn');
+            clickAndFocus(acBtn);
+            break;
+        case '%':
+            const percentBtn = document.querySelector('.percent-btn');
+            clickAndFocus(percentBtn);
+            break;
+        case '/':
+            const divideBtn = document.querySelector('.divide-btn');
+            clickAndFocus(divideBtn);
+            break;
+        case '*':
+            const multiplyBtn = document.querySelector('.multiply-btn');
+            clickAndFocus(multiplyBtn);
+            break;
+        case '-':
+            const subtractBtn = document.querySelector('.subtract-btn');
+            clickAndFocus(subtractBtn);
+            break;
+        case '+':
+            const addBtn = document.querySelector('.addition-btn');
+            clickAndFocus(addBtn);
+            break;
+        case 'Enter':
+            const equalsBtn = document.querySelector('.equals-btn');
+            clickAndFocus(equalsBtn);
+            break;
+        case '9':
+            const nineBtn = document.querySelector('.nine-btn');
+            clickAndFocus(nineBtn);
+            break;
+        case '8':
+            const eightBtn = document.querySelector('.eight-btn');
+            clickAndFocus(eightBtn);
+            break;
+        case '7':
+            const sevenBtn = document.querySelector('.seven-btn');
+            clickAndFocus(sevenBtn);
+            break;
+        case '6':
+            const sixBtn = document.querySelector('.six-btn');
+            clickAndFocus(sixBtn);
+            break;
+        case '5':
+            const fiveBtn = document.querySelector('.five-btn');
+            clickAndFocus(fiveBtn);
+            break;
+        case '4':
+            const fourBtn = document.querySelector('.four-btn');
+            clickAndFocus(fourBtn);
+            break;
+        case '3':
+            const threeBtn = document.querySelector('.three-btn');
+            clickAndFocus(threeBtn);
+            break;
+        case '2':
+            const twoBtn = document.querySelector('.two-btn');
+            clickAndFocus(twoBtn);
+            break;
+        case '1':
+            const oneBtn = document.querySelector('.one-btn');
+            clickAndFocus(oneBtn);
+            break;
+        case '0':
+            const zeroBtn = document.querySelector('.zero-btn');
+            clickAndFocus(zeroBtn);
+            break;
+        case '.':
+            const decimalBtn = document.querySelector('.decimal-btn');
+            clickAndFocus(decimalBtn);
+            break;
+        default:
+            break;
+    }
+};
+const addKeypressEvents = () => {
+    const body = document.querySelector('body');
+    body.addEventListener('keyup', handleKeypress);
+};
 function main() {
     updateDisplay('0');
     addBtnClickEvents();
+    addKeypressEvents();
 }
 
 main();
