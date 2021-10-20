@@ -1,3 +1,4 @@
+/// GLOBAL VARIABLES
 let displayValue = '';
 let numArray = [];
 let operator = '';
@@ -19,9 +20,10 @@ const operators = {
         return num1 / num2;
     },
 };
+
 const operate = (num1, num2, operator) => operators[operator](num1, num2);
 const storeNum = (number) => numArray.push(parseFloat(number));
-const resetFontSize = () => (document.querySelector('.display').style.fontSize = '64px');
+const resetFontSize = () => (document.querySelector('.display').style.fontSize = '55px');
 const checkDivisionByZero = () => {
     if (operator === 'divide' && displayValue === '0') {
         alert('Cannot divide by 0 calculator has been reset');
@@ -48,19 +50,19 @@ const formatNum = (number) => {
 const formatDisplay = () => {
     const display = document.querySelector('.display');
     console.log(displayValue.length);
-    if (displayValue.length > 18) {
+    if (displayValue.length > 15) {
         display.style.fontSize = '50px';
     }
-    if (displayValue.length > 23) {
+    if (displayValue.length > 19) {
         display.style.fontSize = '40px';
     }
-    if (displayValue.length > 29) {
+    if (displayValue.length > 24) {
         display.style.fontSize = '30px';
     }
-    if (displayValue.length > 39) {
+    if (displayValue.length > 32) {
         display.style.fontSize = '20px';
     }
-    if (displayValue.length > 59) {
+    if (displayValue.length > 49) {
         alert('You have exceeded calculators max capacity and it has been reset');
         reset();
     }

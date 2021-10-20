@@ -4,26 +4,30 @@ body {
     height: 100%;
     width: 100%;
     background-color: rgb(213, 213, 213);
+    font-family: 'Noto Sans Mono', monospace;
 }
 
 button:focus {
     outline: 0;
-}
-
-button.active {
-    background-color: white;
+    filter: brightness(0.7);
 }
 
 .wrapper {
     height: 100%;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
 }
 
+.footer {
+    position: absolute;
+    bottom: 0;
+}
 .calc-wrapper {
     width: 600px;
     border: 3px solid black;
+    border-radius: 10px;
 }
 
 .display-wrapper {
@@ -37,7 +41,7 @@ button.active {
 
 .display {
     color: white;
-    font-size: 64px;
+    font-size: 55px;
     padding-right: 5px;
 }
 
@@ -63,6 +67,10 @@ button.active {
 .calc-btn.zero-btn {
     grid-column-start: 1;
     grid-column-end: 3;
+    border-bottom-left-radius: 5px;
+}
+.calc-btn.equals-btn {
+    border-bottom-right-radius: 5px;
 }
 
 .divide-btn,
